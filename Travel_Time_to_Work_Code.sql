@@ -786,19 +786,22 @@ SET
 DROP TEMPORARY TABLE Hold_Val;
 
 
--- 
+-- This table will hold the counties with highest percentages for each state
 CREATE TABLE Max_Counties (
 	State VARCHAR(33),
     	County_0_9 VARCHAR(33),
     	Max_0_9 FLOAT
 );
 
+-- Add the max percentages to Max_Counties
 INSERT INTO Max_Counties(
 	State,
     	County_0_9,
     	Max_0_9
 )
+-- Given the complexity of such a query let's use a CTE to get teh max counties and their values
 WITH Ranked_Time AS ( 
+-- Partitioning states and ordering by the travel time to find the max counties in each state
 	SELECT
 		State,
 		County,
@@ -806,6 +809,7 @@ WITH Ranked_Time AS (
 		ROW_NUMBER() OVER (PARTITION BY STATE ORDER BY Travel_Time_0_9_Pct DESC) AS RN
 	FROM County_Percentages
 )
+-- Let's pick out our counties now that, within each state, they are ordered by highest travel times
 SELECT 
 	State,
 	County,
@@ -813,17 +817,19 @@ SELECT
 FROM Ranked_Time
 WHERE RN = 1;
 
+-- We will repeat the process with the rest of the travel times using the UPDATE statement and Temp tables
 ALTER TABLE Max_Counties
 ADD COLUMN County_10_19 VARCHAR(33),
 ADD COLUMN Max_10_19 FLOAT;
 
-
+-- Create the temporary table to catch the max values counties so we can join in the UPDATE section with Max_Counties
 CREATE TEMPORARY TABLE Hold_Val (
 	State VARCHAR(33),
 	County VARCHAR(33),
 	Travel_Time_10_19_Pct FLOAT
 );
 
+-- Using the same CTE above we will "catch" the query result in the temporary table
 INSERT INTO Hold_Val (State, County, Travel_Time_10_19_Pct) (
     WITH Ranked_Time AS ( 
 	SELECT
@@ -840,15 +846,17 @@ INSERT INTO Hold_Val (State, County, Travel_Time_10_19_Pct) (
 	FROM Ranked_Time
 	WHERE RN = 1
 );
-
+-- Update the Max_Counties while making sure to join the counties to the appropriate state
 UPDATE Max_Counties M
 JOIN Hold_Val H ON H.State = M.State
 SET 
-M.County_10_19 = H.County,
-M.Max_10_19 = H.Travel_Time_10_19_Pct;
+	M.County_10_19 = H.County,
+	M.Max_10_19 = H.Travel_Time_10_19_Pct;
 
+-- Delete the temporary table so that we can start anew!
 DROP TEMPORARY TABLE Hold_Val;
 
+-- Repeating for the remaining columns!
 ALTER TABLE Max_Counties
 ADD COLUMN County_20_29 VARCHAR(33),
 ADD COLUMN Max_20_29 FLOAT;
@@ -1024,6 +1032,7 @@ M.Max_90_Up = H.Travel_Time_90_Up_Pct;
 
 DROP TEMPORARY TABLE Hold_Val;
 
+-- Counties? Pfft. We are on census tracts now. Let's make a table for the max values
 CREATE TABLE Max_Census_Tract (
 	State VARCHAR(33),
     County VARCHAR(33),
@@ -1031,6 +1040,7 @@ CREATE TABLE Max_Census_Tract (
     Max_0_9 FLOAT
 );
 
+-- We will insert into the table the results of using a CTE in the same manner as before
 INSERT INTO Max_Census_Tract (
 	State,
     County,
@@ -1038,6 +1048,7 @@ INSERT INTO Max_Census_Tract (
     Max_0_9
 )
 (
+	-- The difference here is that we will partition the counties with the states as well
 	WITH Ranked_Time AS ( 
 		SELECT
 			State,
@@ -1056,10 +1067,12 @@ INSERT INTO Max_Census_Tract (
 		WHERE RN = 1
 );
 
+-- We will repeat these steps with the UPDATE statement and TEMP table
 ALTER TABLE Max_Census_Tract 
 ADD COLUMN Census_Tract_10_19 VARCHAR(33),
 ADD COLUMN Max_10_19 FLOAT;
 
+-- TEMPORARY table for holding our max valued counties
 CREATE TEMPORARY TABLE Hold_Val (
 	State VARCHAR(33),
     County VARCHAR(33),
@@ -1092,14 +1105,17 @@ INSERT INTO Hold_Val (
 		WHERE RN = 1
 );
 
+-- UPDATE our table making sure to assign the tract by the appropriate state and county using JOIN
 UPDATE Max_Census_Tract M
 JOIN Hold_Val H ON M.State = H.State AND M.County = H.County
 SET 
 	M.Census_Tract_10_19 = H.Census_Tract_10_19,
     M.Max_10_19 = H.Max_10_19;
 
+-- Delete the temporary table for the next query
 DROP TEMPORARY TABLE Hold_Val;
 
+-- Repeat for the remaining travel times!
 ALTER TABLE Max_Census_Tract 
 ADD COLUMN Census_Tract_20_29 VARCHAR(33),
 ADD COLUMN Max_20_29 FLOAT;
@@ -1319,3 +1335,5 @@ SET
     M.Max_90_Up = H.Max_90_Up;
 
 DROP TEMPORARY TABLE Hold_Val;
+
+-- You've reached the end. Now you should have the same cool looking tables that were used for the dashboard!
