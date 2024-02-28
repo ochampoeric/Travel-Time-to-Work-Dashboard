@@ -4,6 +4,6 @@ Two things led to the idea for this project: jury duty and the amount of time it
 ## Navigating the *Repository*
 Here are the links to the datasets I used for this project: [Travel Time to Work Dataset](https://geodata.bts.gov/datasets/usdot::travel-time-to-work/about) and [Means of Transportation to Work](https://geodata.bts.gov/datasets/usdot::means-of-transportation-to-work/about).
 
-If you are interested, check out the MySQL code that lead to the results used in the tableau dashboard in .
+If you are interested, check out the MySQL code that lead to the results used in the tableau dashboard [HERE](Travel_Time_to_Work_Code.sql) .
 
 And if you happened to stumble on my project (not through LinkedIn at least) here is my [dashboard](https://public.tableau.com/views/TravelTimeTransportDashboard/FinalBoard?:language=en-US&:sid=&:display_count=n&:origin=viz_share_link)!
