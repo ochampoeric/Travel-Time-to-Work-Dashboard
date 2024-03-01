@@ -4,6 +4,7 @@ Two things led to the idea for this project: jury duty and the amount of time it
 ## About the Travel Time to Work and Means of Transportation to Work datasets
 The datasets are CSV files with headers for the columns as:
 
+### The Travel_Time_to_Work Dataset
 1. **geoid** - holds the geospatial unique identifier of the census tract. This can be used by tableau in conjuction with the census tract shapefile to provide maps with census tract detailing
 2. **statefp** - holds the Federal Information Processing Standards (FIPS) code assigned to each State
 3. **countyfp** - similar to statefp, this column holds the FIPS code assigned to the county
@@ -28,6 +29,34 @@ The datasets are CSV files with headers for the columns as:
 22. **hh_90up_p** - has the percentage of workers (out of total workers) who's travel time is between 90 & up mins
 23. **shape_Length** - has the length (or perimeter) of the census tract
 24. **shape_Area** - has the area of the census tract
+    
+### The Means_of_Transportation_to_Work Dataset
+1. **geoid** - holds the geospatial unique identifier of the census tract. This can be used by tableau in conjuction with the census tract shapefile to provide maps with census tract detailing
+2. **statefp** - holds the Federal Information Processing Standards (FIPS) code assigned to each State
+3. **countyfp** - similar to statefp, this column holds the FIPS code assigned to the county
+4. **tractce** - stands for census Tract Code Extension which helps identify the census tract within it's relative county
+5. **tractid** - yhe Tract Id is pretty much the same as the tractce except that it is tractce divided by a thousand and is a float
+6. **namelsad** - dtands for the name of the Legal and Statistical Area Description. This is just "Census Tract" + "tractid"
+7. **name** - contains the namelsad, name of county and state in a single string
+8. **hh_tot** - holds the total amount of workers that have a contribution in any of the following columns
+9. **hh_ct** - has the amount of workers who's mean of transportation is a car, van or truck (those who drive alone and carpool)
+10. **hh_cta** - has the amount of workers who's mean of transportation is a car, van or truck (those who drive alone)
+11. **hh_cc** - has the amount of workers who's mean of transportation is a car, van or truck (those who carpool)
+12. **hh_pt** - has the amount of workers who's mean of transportation is public transportation
+13. **hh_bc** - has the amount of workers who's mean of transportation is bicycling
+14. **hh_wl** - has the amount of workers who walk to work
+15. **hh_other** - has the amount of workers who's mean of transportation is by other means (airplane?)
+16. **hh_wfh** - has the amount of workers who work from home
+17. **hh_ct_p** - has the percentage of workers (out of total workers) who's mean of transportation is a car, van or truck (those who drive alone and carpool)
+18. **hh_cta_p** - has the percentage of workers (out of total workers) who's mean of transportation is a car, van or truck (those who drive alone)
+19. **hh_cc_p** - has the percentage of workers (out of total workers) who's mean of transportation is a car, van or truck (those who carpool)
+20. **hh_pt_p** - has the percentage of workers (out of total workers) who's mean of transportation is public transportation
+21. **hh_bc_p** - has the percentage of workers (out of total workers) who's mean of transportation is bicycling
+22. **hh_wl_p** - has the percentage of workers (out of total workers) who walk to work
+23. **hh_other_p** - has the percentage of workers (out of total workers) who's mean of transportation is by other means
+24. **hh_wfh** - has the amount of workers who work from home
+25. **shape_Length** - has the length (or perimeter) of the census tract
+26. **shape_Area** - has the area of the census tract
 
 ## Navigating the *Repository*
 Here are the links to the datasets I used for this project: [Travel Time to Work Dataset](https://geodata.bts.gov/datasets/usdot::travel-time-to-work/about) and [Means of Transportation to Work](https://geodata.bts.gov/datasets/usdot::means-of-transportation-to-work/about).
